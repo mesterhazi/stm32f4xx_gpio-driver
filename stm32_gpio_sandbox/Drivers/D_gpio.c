@@ -51,6 +51,7 @@ void D_Init_Gpio(GPIO_TypeDef* GpioPort, D_GPIO_InitTypeDef* GpioInit) {
 	volatile uint32_t reg_temp = 0;
 	uint32_t offset = 0;
 	uint16_t pin_mask;
+	uint8_t reg_index = 0;
 
 	// check parameters
 //	assert(IS_GPIO_ALL_INSTANCE(GpioPort));
@@ -147,6 +148,12 @@ void D_Init_Gpio(GPIO_TypeDef* GpioPort, D_GPIO_InitTypeDef* GpioInit) {
 				}
 				EXTI->RTSR = reg_temp;
 
+				// Enable interrupts in NVIC
+				// pins 0-9: ISER0, pins 10-15 ISER1
+				reg_index = pin < 10 ? 0 : 1;
+				NVIC->ISER[reg_index] |= (uint32_t) (1U << D_GPIO_GET_NVIC_FROM_PIN(pin));
+
+
 			}
 
 		} else {/* nothin to init here */
@@ -179,5 +186,11 @@ D_GPIO_PinState D_GPIO_ReadPin(GPIO_TypeDef* GpioPort, uint16_t Pin){
 	else{
 		ret = D_GPIO_PIN_RESET;
 	}
+	return ret;
+}
+
+uint16_t D_GPIO_ReadPort(GPIO_TypeDef* GpioPort){
+	uint16_t ret;
+	ret = (uint16_t) (GpioPort->IDR & 0xFFFF);
 	return ret;
 }

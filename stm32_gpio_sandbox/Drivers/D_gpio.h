@@ -118,6 +118,12 @@
 								((VAL) == D_GPIO_PUPD_UP) ||\
 								((VAL) == D_GPIO_PUPD_NONE))
 
+// NVIC related macros
+#define PIN_TO_NVIC_OFFSET		6U
+#define NVIC_9_5_POS			23U
+#define NVIC_15_10_POS			8U
+#define D_GPIO_GET_NVIC_FROM_PIN(pin)	((pin) < 5 ? (pin) + PIN_TO_NVIC_OFFSET : ((pin) < 10 ? NVIC_9_5_POS : NVIC_15_10_POS))
+
 typedef struct{
 	uint32_t Pin; 				// PIN number mask on lower 2 bytes
 	uint32_t Mode; 				// MODE
@@ -139,6 +145,9 @@ void D_GPIO_ResetPin(GPIO_TypeDef* GpioPort, uint16_t Pin);
 void D_GPIO_TogglePin(GPIO_TypeDef* GpioPort, uint16_t Pin);
 void D_GPIO_ClockEn(GPIO_TypeDef* GpioPort, uint8_t Enabled);
 D_GPIO_PinState D_GPIO_ReadPin(GPIO_TypeDef* GpioPort, uint16_t Pin);
+uint16_t D_GPIO_ReadPort(GPIO_TypeDef* GpioPort);
+
+// IRQ Handler
 
 
 #endif /* D_GPIO_H_ */
