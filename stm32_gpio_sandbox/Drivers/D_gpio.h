@@ -40,6 +40,7 @@
 #define D_GPIO_Pin_MASK				0x0000FFFFU 		// mask for checking Pin validity
 
 
+
 // Possible GPIO modes
 #define D_GPIO_MODE_IN 				0x00000000U
 #define D_GPIO_MODE_OUT				0x00000001U
@@ -119,10 +120,11 @@
 								((VAL) == D_GPIO_PUPD_NONE))
 
 // NVIC related macros
-#define PIN_TO_NVIC_OFFSET		6U
-#define NVIC_9_5_POS			23U
-#define NVIC_15_10_POS			8U
-#define D_GPIO_GET_NVIC_FROM_PIN(pin)	((pin) < 5 ? (pin) + PIN_TO_NVIC_OFFSET : ((pin) < 10 ? NVIC_9_5_POS : NVIC_15_10_POS))
+#define PIN_TO_NVIC_OFFSET				6U
+#define NVIC_9_5_POS					23U
+#define NVIC_15_10_POS					40U
+#define NVIC_15_10_OFFSET				8U
+#define D_GPIO_GET_NVIC_FROM_PIN(pin)	((pin) < 5 ? (pin) + PIN_TO_NVIC_OFFSET : ((pin) < 10 ? NVIC_9_5_POS : NVIC_15_10_OFFSET))
 
 typedef struct{
 	uint32_t Pin; 				// PIN number mask on lower 2 bytes
@@ -148,6 +150,7 @@ D_GPIO_PinState D_GPIO_ReadPin(GPIO_TypeDef* GpioPort, uint16_t Pin);
 uint16_t D_GPIO_ReadPort(GPIO_TypeDef* GpioPort);
 
 // IRQ Handler
+void D_GPIO_IrqInit(uint16_t Pin, uint8_t Priority);
 
 
 #endif /* D_GPIO_H_ */

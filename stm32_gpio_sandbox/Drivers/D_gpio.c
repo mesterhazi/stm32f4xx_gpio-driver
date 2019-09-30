@@ -51,7 +51,6 @@ void D_Init_Gpio(GPIO_TypeDef* GpioPort, D_GPIO_InitTypeDef* GpioInit) {
 	volatile uint32_t reg_temp = 0;
 	uint32_t offset = 0;
 	uint16_t pin_mask;
-	uint8_t reg_index = 0;
 
 	// check parameters
 //	assert(IS_GPIO_ALL_INSTANCE(GpioPort));
@@ -148,13 +147,7 @@ void D_Init_Gpio(GPIO_TypeDef* GpioPort, D_GPIO_InitTypeDef* GpioInit) {
 				}
 				EXTI->RTSR = reg_temp;
 
-				// Enable interrupts in NVIC
-				// pins 0-9: ISER0, pins 10-15 ISER1
-				reg_index = pin < 10 ? 0 : 1;
-				NVIC->ISER[reg_index] |= (uint32_t) (1U << D_GPIO_GET_NVIC_FROM_PIN(pin));
-
-
-			}
+				}
 
 		} else {/* nothin to init here */
 		}
@@ -193,4 +186,36 @@ uint16_t D_GPIO_ReadPort(GPIO_TypeDef* GpioPort){
 	uint16_t ret;
 	ret = (uint16_t) (GpioPort->IDR & 0xFFFF);
 	return ret;
+}
+
+// IRQ
+void D_GPIO_IrqInit(uint16_t Pin, uint8_t Priority){
+	uint32_t reg_index = 0;
+	uint32_t nvic_line = 0;
+	for(int pin_num=0; pin_num < 16; pin_num++){
+		if(Pin & (uint16_t)(1U << pin_num)){
+			// Enable interrupts in NVIC
+			// pins 0-9: ISER0, pins 10-15 ISER1
+			reg_index = pin_num < 10 ? 0 : 1;
+			NVIC->ISER[reg_index] |= (uint32_t) (1U << D_GPIO_GET_NVIC_FROM_PIN(pin_num));
+			// set priority in NVIC
+			nvic_line = ((pin_num) < 5 ? (pin_num) + PIN_TO_NVIC_OFFSET : ((pin_num) < 10 ? NVIC_9_5_POS : NVIC_15_10_POS));
+			NVIC->IP[nvic_line] &= 0x00;
+			NVIC->IP[nvic_line] |= Priority;
+		}else{}
+	}
+}
+
+
+void D_GPIO_IrqDeinit(uint16_t Pin){
+	uint32_t reg_index = 0;
+		uint32_t nvic_line = 0;
+		for(int pin_num=0; pin_num < 16; pin_num++){
+			if(Pin & (uint16_t)(1U << pin_num)){
+				// Disable interrupts in NVIC
+				// pins 0-9: ISER0, pins 10-15 ISER1
+				reg_index = pin_num < 10 ? 0 : 1;
+				NVIC->ISER[reg_index] &= ~((uint32_t) (1U << D_GPIO_GET_NVIC_FROM_PIN(pin_num)));
+			}
+		}
 }
