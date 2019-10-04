@@ -115,7 +115,7 @@ void D_Init_Gpio(GPIO_TypeDef* GpioPort, D_GPIO_InitTypeDef* GpioInit) {
 			// IT (EXTI)
 			if (D_IS_GPIO_IT_MODE(GpioInit->Mode)) {
 				RCC->APB2ENR |= (0x1U << 14U);
-				while (~(RCC->APB2ENR & (0x1U << 14U))) {
+				while (!(RCC->APB2ENR & (0x1U << 14U))) {
 					__NOP();
 				}
 				// Enable EXTI is SYSCONF_EXTICRx
@@ -209,7 +209,7 @@ void D_GPIO_IrqInit(uint16_t Pin, uint8_t Priority){
 
 void D_GPIO_IrqDeinit(uint16_t Pin){
 	uint32_t reg_index = 0;
-		uint32_t nvic_line = 0;
+		// uint32_t nvic_line = 0;
 		for(int pin_num=0; pin_num < 16; pin_num++){
 			if(Pin & (uint16_t)(1U << pin_num)){
 				// Disable interrupts in NVIC

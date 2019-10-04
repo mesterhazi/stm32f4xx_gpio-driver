@@ -149,8 +149,10 @@ void D_GPIO_ClockEn(GPIO_TypeDef* GpioPort, uint8_t Enabled);
 D_GPIO_PinState D_GPIO_ReadPin(GPIO_TypeDef* GpioPort, uint16_t Pin);
 uint16_t D_GPIO_ReadPort(GPIO_TypeDef* GpioPort);
 
-// IRQ Handler
+// IRQ
 void D_GPIO_IrqInit(uint16_t Pin, uint8_t Priority);
+void D_GPIO_IrqDeinit(uint16_t Pin);
+void GPIO_IRQHandler(uint16_t Pin);
 
 
 #endif /* D_GPIO_H_ */

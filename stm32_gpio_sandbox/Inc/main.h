@@ -52,7 +52,7 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-
+void GPIO_IRQHandler(uint16_t Pin);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
