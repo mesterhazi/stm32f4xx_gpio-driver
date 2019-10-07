@@ -87,7 +87,7 @@ void EXTI15_10_IRQHandler(void) {
 		GPIO_IRQHandler(14);
 	}
 	if (EXTI->PR & (uint32_t) 1U << 15) {
-			GPIO_IRQHandler(15);
+		GPIO_IRQHandler(15);
 	}
 }
 

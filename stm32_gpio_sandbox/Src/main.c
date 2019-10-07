@@ -235,7 +235,7 @@ static void MX_GPIO_Init(void) {
 	D_GPIO_InitStruct.PuPd = D_GPIO_PUPD_NONE;
 	D_Init_Gpio(GPIOA, &D_GPIO_InitStruct);
 
-	D_GPIO_IrqInit(D_GPIO_Pin0, 0x0001);
+	D_GPIO_IRQInit(D_GPIO_Pin0, 0x0001);
 }
 
 /* USER CODE BEGIN 4 */

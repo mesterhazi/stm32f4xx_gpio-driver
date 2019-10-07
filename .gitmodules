@@ -1,0 +1,3 @@
+[submodule "stm32_gpio_sandbox/Drivers/gpio_driver"]
+	path = stm32_gpio_sandbox/Drivers/gpio_driver
+	url = https://github.com/mesterhazi/stm32f4xx_gpio_driver.git
