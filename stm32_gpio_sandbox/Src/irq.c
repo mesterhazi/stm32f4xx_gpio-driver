@@ -5,7 +5,7 @@
  *      Author: adam
  */
 
-#include "STM32F407xx.h"
+#include "stm32f407xx.h"
 #include "main.h"
 
 /**
